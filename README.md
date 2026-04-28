@@ -1,8 +1,8 @@
 # CMSmsMetadata
 
-A content metadata overview module for **CMS Made Simple 2.x**.
+An interactive content metadata overview module for **CMS Made Simple 2.x**.
 
-Displays all content pages and their metadata fields — tab index, title attributes, access keys, meta descriptions, and any extra content properties — in a single scrollable table, directly in the **Content** section of the admin panel.
+Displays all content pages and their metadata fields — tab index, title attributes, access keys, meta descriptions, and any extra content properties — in a single scrollable table in the **Content** section of the admin panel. Columns can be filtered and values edited directly in the table.
 
 ---
 
@@ -38,11 +38,18 @@ Displays every content page with these fixed columns:
 ### Auto-discovered Extra Columns
 Any additional properties stored in the `content_props` table (e.g. `page_image`, `extra1`, `extra2`, or custom template properties) are automatically detected and appear as additional columns. Body-content fields (`content`, `layout`, `styles`, locale-based props like `content_en_US`) are excluded.
 
-### Summary Statistics
-A statistics bar at the top shows:
-- Total pages
-- Active pages
-- Pages with / without a meta description
+### Column Visibility Picker
+A chip-based token widget lets you show or hide any column. Your selection is saved per installation and persists between sessions.
+
+### Filter Bar
+- **Status pills** — filter rows by All / Active / Inactive with a single click.
+- **Custom filter** — pick any field, choose an operator (contains, ==, !=, is empty, is not empty, >, <), and enter a value. The filter state is also saved between sessions.
+
+### Inline Cell Editing
+Double-click any editable cell (Tab Index, Access Key, Title Attribute, Meta Description, or extra property columns) to edit its value in place. Press **Enter** or click away to save; press **Escape** to cancel. Changes are written directly to the database and the CMS content cache is flushed automatically.
+
+### Content Lock Awareness
+If another admin user has a page open in the standard content editor, that row is highlighted and marked with a 🔒 badge. Double-clicking locked cells is disabled, and any direct save attempt is rejected server-side.
 
 ### Hierarchy Indentation
 Pages are listed in their natural tree order with visual indentation matching the page hierarchy, mirroring the look of the standard Content Manager.
@@ -51,14 +58,7 @@ Pages are listed in their natural tree order with visual indentation matching th
 - Missing values are shown with a muted "–" indicator
 - Cells without a meta description are highlighted with a subtle warm tint
 - Inactive pages are dimmed
-
----
-
-## Roadmap (future versions)
-
-- **Column filtering** – show/hide individual prop columns
-- **Search / highlight** – filter by page name or field content
-- **Inline editing** – edit metadata fields directly in the table without opening the page editor
+- Locked pages have an amber tint and a lock badge
 
 ---
 
