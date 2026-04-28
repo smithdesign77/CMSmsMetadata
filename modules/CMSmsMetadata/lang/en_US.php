@@ -99,6 +99,8 @@ $lang = [
     // -- Inline cell editor ------------------------------------------------------
     'edit_saving'        => 'Saving…',
     'edit_error'         => 'Error saving. Double-click to retry.',
+    'edit_locked'        => 'This page is locked for editing by another user.',
+    'row_locked'         => 'This page is currently being edited by another user and cannot be changed here.',
     'chip_remove_label'  => 'Remove',
 ];
 

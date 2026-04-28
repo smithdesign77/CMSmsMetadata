@@ -104,13 +104,13 @@
 
           <tbody>
             {foreach from=$pages item=page}
-              <tr class="{if not $page.active}row-inactive{/if}" data-cid="{$page.content_id}">
+              <tr class="{if not $page.active}row-inactive{/if}{if isset($locked_ids[$page.content_id])} row-locked{/if}" data-cid="{$page.content_id}"{if isset($locked_ids[$page.content_id])} data-locked="1"{/if}>
 
                 {* ── Page name (always visible, filterable by field 'page') ── *}
                 <td class="col-page" data-col="page"
                     data-val="{$page.content_name|escape}"
                     style="padding-left:{$page.indent_px}px">
-                  <strong>{$page.content_name|escape}</strong>
+                  {if isset($locked_ids[$page.content_id])}<span class="meta-lock-badge" title="{$lang_row_locked}">&#128274;</span>{/if}<strong>{$page.content_name|escape}</strong>
                   {if $page.content_alias neq ''}
                     <br><span class="meta-alias">/{$page.content_alias|escape}</span>
                   {/if}
@@ -311,7 +311,7 @@
         try {
             var fd = new FormData();
             fd.append('cols', JSON.stringify(selected));
-            fetch(SAVE_URL, { method: 'POST', body: fd, keepalive: true }).catch(function () {});
+            fetch(SAVE_URL, { method: 'POST', body: fd, credentials: 'same-origin', keepalive: true }).catch(function () {});
         } catch (e) {}
     }
 
@@ -452,7 +452,7 @@
         try {
             var fd = new FormData();
             fd.append('filter', JSON.stringify(flt));
-            fetch(SAVE_FILTER_URL, { method: 'POST', body: fd, keepalive: true }).catch(function () {});
+            fetch(SAVE_FILTER_URL, { method: 'POST', body: fd, credentials: 'same-origin', keepalive: true }).catch(function () {});
         } catch (e) {}
     }
 
@@ -519,9 +519,10 @@
     'use strict';
 
     var SAVE_CELL_URL = {$save_cell_url_json};
-    var MSG_SAVING = {$js_lang_edit_saving};
-    var MSG_ERROR  = {$js_lang_edit_error};
-    var MSG_EMPTY  = {$js_lang_empty_value};
+    var MSG_SAVING  = {$js_lang_edit_saving};
+    var MSG_ERROR   = {$js_lang_edit_error};
+    var MSG_LOCKED  = {$js_lang_edit_locked};
+    var MSG_EMPTY   = {$js_lang_empty_value};
 
     var active = null;   /* the <td> currently open for editing */
 
@@ -607,7 +608,7 @@
         fd.append('field',      field);
         fd.append('value',      newVal);
 
-        fetch(SAVE_CELL_URL, { method: 'POST', body: fd })
+        fetch(SAVE_CELL_URL, { method: 'POST', body: fd, credentials: 'same-origin' })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 td.classList.remove('meta-cell-saving');
@@ -616,7 +617,8 @@
                     renderCell(td);
                 } else {
                     td.classList.add('meta-cell-error');
-                    td.innerHTML = '<span class="meta-error-indicator" title="' + MSG_ERROR + '">'
+                    var msg = (data.error === 'locked') ? MSG_LOCKED : MSG_ERROR;
+                    td.innerHTML = '<span class="meta-error-indicator" title="' + msg + '">'
                         + esc(newVal) + '</span>';
                 }
             })
@@ -633,6 +635,7 @@
     if (tbl) {
         tbl.addEventListener('dblclick', function (e) {
             var td = e.target.closest ? e.target.closest('td[data-editable="1"]') : null;
+            if (td && td.parentElement && td.parentElement.getAttribute('data-locked') === '1') { td = null; }
             if (td) { openEdit(td); }
         });
     }

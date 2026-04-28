@@ -105,6 +105,8 @@ $lang = [
     // -- Inline-Zellbearbeitung --------------------------------------------------
     'edit_saving'        => 'Wird gespeichert…',
     'edit_error'         => 'Fehler beim Speichern. Doppelklicken zum Wiederholen.',
+    'edit_locked'        => 'Diese Seite wird gerade von einem anderen Benutzer bearbeitet.',
+    'row_locked'         => 'Diese Seite wird gerade von einem anderen Benutzer bearbeitet und kann hier nicht geändert werden.',
     'chip_remove_label'  => 'Entfernen',
 ];
 

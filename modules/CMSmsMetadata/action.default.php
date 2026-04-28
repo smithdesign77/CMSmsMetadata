@@ -85,6 +85,24 @@ if ($sub === 'savecell') {
         exit();
     }
 
+    // ── Content lock check – reject if another user has the page open ─────────
+    $lock_prefix = cms_db_prefix();
+    $lock_uid    = $db->GetOne(
+        "SELECT uid FROM {$lock_prefix}locks
+          WHERE type = 'content' AND oid = ?
+            AND (UNIX_TIMESTAMP(modified) + lifetime) > UNIX_TIMESTAMP()",
+        [$content_id]
+    );
+    if ($lock_uid) {
+        $current_uid = function_exists('get_userid') ? (int) get_userid(false) : 0;
+        if ((int) $lock_uid !== $current_uid) {
+            while (ob_get_level() > 0) { ob_end_clean(); }
+            header('Content-Type: application/json');
+            echo json_encode(['ok' => false, 'error' => 'locked']);
+            exit();
+        }
+    }
+
     // Per-field value length caps
     $max_lengths = [
         'tabindex'  => 6,
@@ -117,6 +135,23 @@ foreach ($pages as &$page) {
     $page['props'] = isset($raw_prop_values[$cid]) ? $raw_prop_values[$cid] : [];
 }
 unset($page);
+
+// ── Fetch active content locks held by other users ────────────────────────────
+$current_uid = function_exists('get_userid') ? (int) get_userid(false) : 0;
+$lprefix     = cms_db_prefix();
+$lock_rows   = $db->GetAll(
+    "SELECT oid FROM {$lprefix}locks
+      WHERE type = 'content'
+        AND uid != ?
+        AND (UNIX_TIMESTAMP(modified) + lifetime) > UNIX_TIMESTAMP()",
+    [$current_uid]
+);
+$locked_ids = [];
+if ($lock_rows) {
+    foreach ($lock_rows as $lr) {
+        $locked_ids[$lr['oid']] = true;   // string key — matches Smarty array lookup
+    }
+}
 
 // ── Compute summary statistics ────────────────────────────────────────────────
 $stat_total        = count($pages);
@@ -174,7 +209,10 @@ if ($saved_json !== '') {
 $col_defs_json    = str_replace('</', '<\/', json_encode($col_defs,    JSON_UNESCAPED_UNICODE));
 $visible_cols_json = str_replace('</', '<\/', json_encode($visible_cols, JSON_UNESCAPED_UNICODE));
 $save_url_json    = json_encode(
-    $this->CreateLink($id, 'default', $returnid, '', ['sub_action' => 'savecols'], '', true)
+    html_entity_decode(
+        $this->CreateLink($id, 'default', $returnid, '', ['sub_action' => 'savecols'], '', true),
+        ENT_QUOTES | ENT_HTML5, 'UTF-8'
+    )
 );
 
 // ── Load saved filter state ────────────────────────────────────────────────────────────
@@ -199,10 +237,16 @@ $filter_fields        = array_merge(['page' => $this->Lang('col_page')], $col_de
 $filter_state_json    = str_replace('</', '<\/', json_encode($filter_state,  JSON_UNESCAPED_UNICODE));
 $filter_fields_json   = str_replace('</', '<\/', json_encode($filter_fields, JSON_UNESCAPED_UNICODE));
 $save_filter_url_json = json_encode(
-    $this->CreateLink($id, 'default', $returnid, '', ['sub_action' => 'savefilter'], '', true)
+    html_entity_decode(
+        $this->CreateLink($id, 'default', $returnid, '', ['sub_action' => 'savefilter'], '', true),
+        ENT_QUOTES | ENT_HTML5, 'UTF-8'
+    )
 );
 $save_cell_url_json = json_encode(
-    $this->CreateLink($id, 'default', $returnid, '', ['sub_action' => 'savecell'], '', true)
+    html_entity_decode(
+        $this->CreateLink($id, 'default', $returnid, '', ['sub_action' => 'savecell'], '', true),
+        ENT_QUOTES | ENT_HTML5, 'UTF-8'
+    )
 );
 
 // ── JSON-encode lang strings used directly inside <script> blocks ─────────────────
@@ -212,12 +256,14 @@ $js_lang_picker_all_selected = str_replace('</', '<\/', json_encode($this->Lang(
 $js_lang_filter_showing      = str_replace('</', '<\/', json_encode($this->Lang('filter_showing'),      JSON_UNESCAPED_UNICODE));
 $js_lang_edit_saving         = str_replace('</', '<\/', json_encode($this->Lang('edit_saving'),         JSON_UNESCAPED_UNICODE));
 $js_lang_edit_error          = str_replace('</', '<\/', json_encode($this->Lang('edit_error'),          JSON_UNESCAPED_UNICODE));
+$js_lang_edit_locked         = str_replace('</', '<\/', json_encode($this->Lang('edit_locked'),         JSON_UNESCAPED_UNICODE));
 $js_lang_empty_value         = str_replace('</', '<\/', json_encode($this->Lang('empty_value'),         JSON_UNESCAPED_UNICODE));
 $js_lang_chip_remove         = str_replace('</', '<\/', json_encode($this->Lang('chip_remove_label'),   JSON_UNESCAPED_UNICODE));
 
 // ── Build template variable map ───────────────────────────────────────────────
 $tpl_vars = [
     'pages'              => $pages,
+    'locked_ids'         => $locked_ids,
     'prop_names'         => $prop_names,
     'stat_total'         => $stat_total,
     'stat_active'        => $stat_active,
@@ -236,6 +282,7 @@ $tpl_vars = [
     'js_lang_filter_showing'        => $js_lang_filter_showing,
     'js_lang_edit_saving'           => $js_lang_edit_saving,
     'js_lang_edit_error'            => $js_lang_edit_error,
+    'js_lang_edit_locked'           => $js_lang_edit_locked,
     'js_lang_empty_value'           => $js_lang_empty_value,
     'js_lang_chip_remove'           => $js_lang_chip_remove,
 ];
@@ -299,6 +346,8 @@ $lang_keys = [
     // Inline cell editor
     'edit_saving',
     'edit_error',
+    'edit_locked',
+    'row_locked',
     'chip_remove_label',
 ];
 foreach ($lang_keys as $key) {

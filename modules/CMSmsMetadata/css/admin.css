@@ -74,6 +74,35 @@
     background-color: #f0f4f8;
 }
 
+/* Locked rows – another user has this page open in the content editor */
+#CMSmsMetadata .meta-table tr.row-locked td {
+    background-color: #fffbef;
+}
+
+#CMSmsMetadata .meta-table tr.row-locked td.col-page {
+    background-color: #fff8e1;
+}
+
+#CMSmsMetadata .meta-table tr.row-locked td[data-editable="1"] {
+    cursor: not-allowed;
+}
+
+#CMSmsMetadata .meta-table tr.row-locked td[data-editable="1"]:hover {
+    background-color: #fffbef;
+}
+
+#CMSmsMetadata .meta-table tr.row-locked td[data-editable="1"]:hover::after {
+    content: none;
+}
+
+#CMSmsMetadata .meta-lock-badge {
+    margin-right: 0.3em;
+    font-size: 0.85em;
+    opacity: 0.75;
+    cursor: default;
+    vertical-align: middle;
+}
+
 /* ── Column width hints ──────────────────────────────────────── */
 #CMSmsMetadata .meta-table .col-center {
     text-align: center;
