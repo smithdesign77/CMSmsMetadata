@@ -1,0 +1,543 @@
+/* ============================================================
+ * CMSmsMetadata – supplemental admin styles
+ * Builds on the standard CMS Made Simple admin stylesheet.
+ * ============================================================ */
+
+/* ── Outer container ─────────────────────────────────────────── */
+#CMSmsMetadata .pageheader h2 {
+    margin-bottom: 0.5em;
+}
+
+/* ── Scrollable table wrapper ────────────────────────────────── */
+#CMSmsMetadata .meta-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+/* ── Metadata table ──────────────────────────────────────────── */
+#CMSmsMetadata .meta-table {
+    border-collapse: collapse;
+    white-space: nowrap;
+    min-width: 100%;
+    font-size: 0.88em;
+}
+
+#CMSmsMetadata .meta-table th,
+#CMSmsMetadata .meta-table td {
+    padding: 6px 10px;
+    vertical-align: middle;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+#CMSmsMetadata .meta-table thead th {
+    font-weight: bold;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-bottom: 2px solid #c8c8c8;
+    white-space: nowrap;
+}
+
+/* ── Sticky first column (page name) ─────────────────────────── */
+#CMSmsMetadata .meta-table th.col-page,
+#CMSmsMetadata .meta-table td.col-page {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    min-width: 180px;
+    max-width: 280px;
+    white-space: normal;
+    border-right: 2px solid #d0d0d0;
+}
+
+#CMSmsMetadata .meta-table thead th.col-page {
+    z-index: 3;
+}
+
+/* Inactive rows get a slightly dimmed background */
+#CMSmsMetadata .meta-table tr.row-inactive td {
+    opacity: 0.55;
+}
+
+#CMSmsMetadata .meta-table tr.row-inactive td.col-page {
+    background: #fafafa;
+}
+
+#CMSmsMetadata .meta-table tr:hover td {
+    background-color: #f0f4f8;
+}
+
+#CMSmsMetadata .meta-table tr:hover td.col-page {
+    background-color: #f0f4f8;
+}
+
+/* ── Column width hints ──────────────────────────────────────── */
+#CMSmsMetadata .meta-table .col-center {
+    text-align: center;
+}
+
+#CMSmsMetadata .meta-table .col-active {
+    width: 50px;
+    min-width: 50px;
+}
+
+#CMSmsMetadata .meta-table .col-tabindex {
+    width: 70px;
+    min-width: 60px;
+}
+
+#CMSmsMetadata .meta-table .col-accesskey {
+    width: 70px;
+    min-width: 60px;
+}
+
+#CMSmsMetadata .meta-table .col-titleattr {
+    min-width: 140px;
+    max-width: 200px;
+    white-space: normal;
+}
+
+#CMSmsMetadata .meta-table .col-metadata {
+    min-width: 220px;
+    max-width: 360px;
+    white-space: normal;
+}
+
+#CMSmsMetadata .meta-table .col-prop {
+    min-width: 120px;
+    max-width: 200px;
+    white-space: normal;
+}
+
+/* ── Page name sub-text (alias) ──────────────────────────────── */
+#CMSmsMetadata .meta-alias {
+    font-size: 0.82em;
+    color: #888;
+}
+
+/* ── Active/inactive dots ────────────────────────────────────── */
+#CMSmsMetadata .meta-dot {
+    font-size: 1em;
+    cursor: default;
+}
+
+#CMSmsMetadata .meta-dot-on  { color: #2a7a00; }
+#CMSmsMetadata .meta-dot-off { color: #bbbbbb; }
+
+/* ── Monospace values (tabindex, accesskey) ──────────────────── */
+#CMSmsMetadata .meta-table code {
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #333;
+}
+
+/* ── Truncated text cells ────────────────────────────────────── */
+#CMSmsMetadata .meta-text {
+    cursor: default;
+}
+
+/* ── Empty cell indicator ────────────────────────────────────── */
+#CMSmsMetadata .meta-empty {
+    color: #ccc;
+    font-style: normal;
+}
+
+/* ── Cells with missing data get a very light warm tint ─────── */
+#CMSmsMetadata .meta-table td.meta-cell-empty {
+    background-color: #fffaf6;
+}
+
+/* ── Footer footnote ─────────────────────────────────────────── */
+#CMSmsMetadata .meta-footnote {
+    margin-top: 10px;
+    font-size: 0.82em;
+    color: #888;
+    font-style: italic;
+}
+
+/* ============================================================
+ * Filter bar (status pills + custom field filter)
+ * ============================================================ */
+
+/* ── Outer wrapper ────────────────────────────────────────────── */
+#CMSmsMetadata .meta-filter-wrap {
+    margin-bottom: 14px;
+}
+
+/* ── Row 1: status pills + showing counter ───────────────────── */
+#CMSmsMetadata .meta-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+#CMSmsMetadata .meta-filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+#CMSmsMetadata .meta-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    font-size: 0.85em;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 14px;
+    cursor: pointer;
+    color: #555;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+    white-space: nowrap;
+}
+
+#CMSmsMetadata .meta-filter-pill:hover {
+    background: #e0eaf5;
+    border-color: #8ab4d9;
+    color: #1a3b6e;
+}
+
+#CMSmsMetadata .meta-filter-pill.meta-pill-selected {
+    background: #3370a6;
+    border-color: #3370a6;
+    color: #fff;
+    font-weight: bold;
+}
+
+#CMSmsMetadata .meta-filter-pill.meta-pill-selected .meta-pill-count {
+    opacity: 0.8;
+}
+
+#CMSmsMetadata .meta-pill-count {
+    font-weight: normal;
+    font-size: 0.9em;
+    background: rgba(0,0,0,0.08);
+    border-radius: 9px;
+    padding: 0 6px;
+    line-height: 1.5;
+}
+
+#CMSmsMetadata .meta-filter-showing {
+    font-size: 0.82em;
+    color: #888;
+    white-space: nowrap;
+    font-style: italic;
+}
+
+/* ── Row 2: custom field filter ──────────────────────────────── */
+#CMSmsMetadata .meta-custom-filter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 7px 10px;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.88em;
+}
+
+#CMSmsMetadata .meta-cfilter-label {
+    font-weight: bold;
+    color: #555;
+    white-space: nowrap;
+    font-size: 0.88em;
+}
+
+#CMSmsMetadata .meta-cfilter-select,
+#CMSmsMetadata .meta-cfilter-value {
+    padding: 3px 7px;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    background: #fff;
+    font-size: 0.9em;
+    color: #333;
+    height: 26px;
+    box-sizing: border-box;
+}
+
+#CMSmsMetadata .meta-cfilter-select:focus,
+#CMSmsMetadata .meta-cfilter-value:focus {
+    border-color: #6a9fd8;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(100,160,220,0.2);
+}
+
+#CMSmsMetadata .meta-cfilter-value {
+    min-width: 160px;
+    max-width: 320px;
+    flex: 1 1 160px;
+}
+
+#CMSmsMetadata .meta-cfilter-clear {
+    padding: 3px 10px;
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 0.88em;
+    color: #777;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+#CMSmsMetadata .meta-cfilter-clear:hover {
+    background: #ffe8e8;
+    border-color: #e08080;
+    color: #a00;
+}
+
+/* ============================================================
+ * Column picker widget
+ * ============================================================ */
+
+/* ── Outer wrapper ────────────────────────────────────────────── */
+#CMSmsMetadata .meta-col-picker {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+/* ── Label + reset row ───────────────────────────────────────── */
+#CMSmsMetadata .meta-picker-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+#CMSmsMetadata .meta-picker-label {
+    font-size: 0.83em;
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+#CMSmsMetadata .meta-picker-reset {
+    font-size: 0.78em;
+    color: #777;
+    background: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 1px 7px;
+    cursor: pointer;
+    line-height: 1.6;
+}
+
+#CMSmsMetadata .meta-picker-reset:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+/* ── The chip/token input box ─────────────────────────────────── */
+#CMSmsMetadata .meta-picker-input {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    min-height: 36px;
+    padding: 4px 8px;
+    box-sizing: border-box;
+    background: #fff;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#CMSmsMetadata .meta-picker-input:hover,
+#CMSmsMetadata .meta-picker-input.meta-picker-open {
+    border-color: #6a9fd8;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(100, 160, 220, 0.18);
+}
+
+#CMSmsMetadata .meta-picker-input:focus {
+    border-color: #6a9fd8;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(100, 160, 220, 0.25);
+}
+
+/* ── Placeholder text ─────────────────────────────────────────── */
+#CMSmsMetadata .meta-picker-ph {
+    font-size: 0.88em;
+    color: #aaa;
+    pointer-events: none;
+    padding: 1px 0;
+}
+
+/* ── Chips (selected column tags) ─────────────────────────────── */
+#CMSmsMetadata .meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #e5edf6;
+    border: 1px solid #b8cde8;
+    border-radius: 3px;
+    padding: 2px 4px 2px 7px;
+    font-size: 0.82em;
+    color: #2c4e80;
+    white-space: nowrap;
+    max-width: 220px;
+}
+
+#CMSmsMetadata .meta-chip-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Chip remove button ───────────────────────────────────────── */
+#CMSmsMetadata .meta-chip-x {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    border-radius: 2px;
+    color: #5a7ab0;
+    font-size: 1em;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+#CMSmsMetadata .meta-chip-x:hover {
+    background: #c0d4ed;
+    color: #1a3b6e;
+}
+
+/* ── Dropdown ─────────────────────────────────────────────────── */
+#CMSmsMetadata .meta-picker-dropdown {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+    z-index: 200;
+    background: #fff;
+    border: 1px solid #bbb;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+/* ── Dropdown item ────────────────────────────────────────────── */
+#CMSmsMetadata .meta-picker-item {
+    padding: 7px 12px;
+    font-size: 0.88em;
+    color: #333;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#CMSmsMetadata .meta-picker-item:last-child {
+    border-bottom: none;
+}
+
+#CMSmsMetadata .meta-picker-item:hover {
+    background: #e8f0fb;
+    color: #1a3b6e;
+}
+
+/* ── "All columns selected" message ──────────────────────────── */
+#CMSmsMetadata .meta-picker-empty {
+    padding: 8px 12px;
+    font-size: 0.85em;
+    color: #999;
+    font-style: italic;
+}
+
+/* ============================================================
+ * Inline cell editor
+ * ============================================================ */
+
+/* Editable cells show a cell-cursor and a subtle pencil hint on hover */
+#CMSmsMetadata td[data-editable="1"] {
+    cursor: cell;
+    position: relative;
+}
+
+#CMSmsMetadata td[data-editable="1"]:not(.meta-cell-editing):hover {
+    background-color: #f5f9ff;
+}
+
+#CMSmsMetadata td[data-editable="1"]:not(.meta-cell-editing):hover::after {
+    content: '\270e';
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 0.72em;
+    color: #b0c8e8;
+    pointer-events: none;
+    line-height: 1;
+}
+
+/* Cell is open for editing */
+#CMSmsMetadata td.meta-cell-editing {
+    background-color: #fffbe6 !important;
+    padding: 1px !important;
+    vertical-align: top;
+}
+
+/* Waiting for server response */
+#CMSmsMetadata td.meta-cell-saving {
+    opacity: 0.55;
+    background-color: #e8f3ff !important;
+}
+
+/* Server returned an error */
+#CMSmsMetadata td.meta-cell-error {
+    background-color: #fff0f0 !important;
+    outline: 1px solid #e04040;
+}
+
+/* The <input> or <textarea> inside the cell */
+#CMSmsMetadata .meta-cell-input {
+    display: block;
+    width: 100%;
+    min-width: 80px;
+    padding: 3px 5px;
+    border: 1px solid #6a9fd8;
+    border-radius: 2px;
+    font-size: inherit;
+    font-family: inherit;
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(100, 160, 220, 0.22);
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+#CMSmsMetadata .meta-cell-input:focus {
+    outline: none;
+    border-color: #3370a6;
+    box-shadow: 0 0 0 2px rgba(51, 112, 166, 0.28);
+}
+
+/* "Saving…" text shown while request is in flight */
+#CMSmsMetadata .meta-saving-indicator {
+    font-style: italic;
+    font-size: 0.82em;
+    color: #7799bb;
+}
+
+/* Error state display – shows the attempted value in red */
+#CMSmsMetadata .meta-error-indicator {
+    color: #c00;
+    cursor: pointer;
+}
